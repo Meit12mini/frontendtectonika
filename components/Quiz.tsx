@@ -96,7 +96,13 @@ const Quiz: React.FC = () => {
 
   const handleBack = () => { if (step > 1) setStep(s => s - 1); };
   const { executeRecaptcha } = useGoogleReCaptcha();
-  const handleSubmit = async (phone: string) => {
+  // наверху файла можно (по желанию) завести константы
+const VERIFY_URL = "https://backendtectonika.onrender.com/api/lead";
+const SUBMIT_URL = "https://backendtectonika.onrender.com/api/submit"; 
+// ^^^ замените на ваш реальный эндпоинт для приёма данных.
+// Если отдельного эндпоинта пока нет — временно поставьте сюда тот же VERIFY_URL и передавайте token ещё раз.
+
+const handleSubmit = async (phone: string) => {
   if (!executeRecaptcha) {
     setError("reCAPTCHA не инициализирована");
     return;
@@ -106,26 +112,36 @@ const Quiz: React.FC = () => {
   setError(null);
 
   try {
-    // Получаем token reCAPTCHA первым
+    // 1) Получаем токен
     const token = await executeRecaptcha("quiz_submit");
-    console.log("reCAPTCHA token:", token); // для проверки
-
     if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
-    // Далее обрабатываем ответы квиза
+    // 2) Проверяем токен на сервере (только { token })
+    const verifyRes = await fetch(VERIFY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    const verifyData = await verifyRes.json();
+
+    if (!verifyRes.ok || !verifyData.success) {
+      throw new Error(verifyData.error || "Проверка reCAPTCHA не пройдена");
+    }
+
+    // 3) Капча пройдена — теперь обрабатываем лид
     const result = await processLead(answers, phone);
     setGeminiResult(result);
 
-    // Отправляем на сервер с токеном
-    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
+    // 4) Отправляем данные формы на ваш эндпоинт сохранения
+    const submitRes = await fetch(SUBMIT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...result, token }),
+      body: JSON.stringify(result), // здесь уже без token, если вашему бэку он не нужен
     });
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Ошибка отправки на сервер");
+    if (!submitRes.ok) {
+      const data = await submitRes.json().catch(() => ({}));
+      throw new Error(data.error || "Ошибка отправки данных");
     }
 
     setIsFinished(true);
