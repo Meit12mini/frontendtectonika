@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+
 import { QUIZ_QUESTIONS } from '../constants';
 import type { Answers, QuizQuestion, QuizOption, GeminiResponse } from '../types';
 import ProgressBar from './ProgressBar';
@@ -76,33 +77,75 @@ const FinalStep: React.FC<{ onSubmit: (phone: string) => void }> = ({ onSubmit }
 };
 
 // Главный компонент квиза
-
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 const Quiz: React.FC = () => {
+  
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [isFinished, setIsFinished] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [geminiResult, setGeminiResult] = useState<GeminiResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const totalSteps = QUIZ_QUESTIONS.length;
+
+  const handleAnswer = useCallback((answer: string) => {
+    setAnswers(prev => ({ ...prev, [step]: answer }));
+    setStep(s => s + 1);
+  }, [step]);
+
+  const handleBack = () => { if (step > 1) setStep(s => s - 1); };
   const { executeRecaptcha } = useGoogleReCaptcha();
-  const [status, setStatus] = useState("");
+  const handleSubmit = async (phone: string) => {
+    if (!executeRecaptcha) return console.error("reCAPTCHA не инициализирован");
+    setIsLoading(true); setError(null);
+    try {
+      const result = await processLead(answers, phone);
+      setGeminiResult(result);
 
-  const handleSubmit = async () => {
-    if (!executeRecaptcha) return;
+      const token = await executeRecaptcha("quiz_submit");
+      if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
-    setStatus("Получаем токен...");
-    const token = await executeRecaptcha("quiz_submit");
+      const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...result, token }),
+      });
 
-    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
-
-    const data = await res.json();
-    setStatus(data.success ? "reCAPTCHA пройдена!" : `Ошибка: ${data.error}`);
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Ошибка отправки на сервер");
+      }
+    } catch (err: any) { setError(err.message || "Произошла неизвестная ошибка."); }
+    finally { setIsLoading(false); setIsFinished(true); }
   };
 
+  const currentQuestion = QUIZ_QUESTIONS[step - 1];
+
   return (
-    <div>
-      <button onClick={handleSubmit}>Отправить квиз</button>
-      <p>{status}</p>
-    </div>
+    <section className="bg-gray-50 py-16 sm:py-24">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl min-h-[500px] flex flex-col justify-center items-center">
+          {isFinished ? (
+            <Summary isLoading={isLoading} error={error} result={geminiResult} />
+          ) : (
+            <>
+              <ProgressBar currentStep={step} totalSteps={totalSteps + 1} />
+              {step > 1 && step <= totalSteps + 1 && (
+                <button onClick={handleBack} className="self-start mb-4 text-gray-600 hover:text-gray-900">Назад</button>
+              )}
+              <div className="w-full flex-grow flex items-center">
+                {currentQuestion ? (
+                  <QuizStep question={currentQuestion} onAnswer={handleAnswer} />
+                ) : (
+                  <FinalStep onSubmit={handleSubmit} />
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
   );
 };
 
