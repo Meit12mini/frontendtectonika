@@ -137,7 +137,7 @@ const Quiz: React.FC = () => {
     setStatus("Получаем токен...");
     const token = await executeRecaptcha("quiz_submit");
 
-    const res = await fetch("http://localhost:3001/api/lead", {
+    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
