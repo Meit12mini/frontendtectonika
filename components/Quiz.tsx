@@ -5,7 +5,7 @@ import type { Answers, QuizQuestion, QuizOption, GeminiResponse } from '../types
 import ProgressBar from './ProgressBar';
 import Summary from './Summary';
 import { processLead } from '../services/geminiService';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+
 
 const QuizStep: React.FC<{ question: QuizQuestion; onAnswer: (answer: string) => void }> = ({ question, onAnswer }) => {
   
@@ -126,111 +126,32 @@ const FinalStep: React.FC<{ onSubmit: (phone: string) => void }> = ({ onSubmit }
   );
 };
 
-
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 const Quiz: React.FC = () => {
-  const {executeRecaptcha } = useGoogleReCaptcha();
-  const [step, setStep] = useState(1);
-  const [answers, setAnswers] = useState<Answers>({});
-  const [isFinished, setIsFinished] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [geminiResult, setGeminiResult] = useState<GeminiResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [status, setStatus] = useState("");
 
-  const totalSteps = QUIZ_QUESTIONS.length;
+  const handleSubmit = async () => {
+    if (!executeRecaptcha) return;
 
-  const handleAnswer = useCallback((answer: string) => {
-    setAnswers(prev => ({ ...prev, [step]: answer }));
-    if (step < totalSteps) {
-      setStep(s => s + 1);
-    } else {
-      setStep(s => s + 1); // Move to final step
-    }
-  }, [step, totalSteps]);
+    setStatus("Получаем токен...");
+    const token = await executeRecaptcha("quiz_submit");
 
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(s => s - 1);
-    }
-  };
-
-  const handleSubmit = async (phone: string) => {
-  setIsLoading(true);
-  setError(null);
-
-  try {
-    // 1. Обработка квиза через Gemini (AI)
-    const result = await processLead(answers, phone);
-    setGeminiResult(result);
-
-    // 2. Получение токена reCAPTCHA (если используешь v3)
-    if (!executeRecaptcha) {
-  console.error("executeRecaptcha не инициализирован");
-  return;
-}
-
-const recaptchaToken = await executeRecaptcha("quiz_submit");
-if (!recaptchaToken) {
-  console.error("Не удалось получить токен reCAPTCHA");
-  return;
-}
-
-    // 3. Отправка данных на твой backend
-    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
+    const res = await fetch("http://localhost:3001/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-
-        ...result,
-        token: recaptchaToken,
-      }),
+      body: JSON.stringify({ token }),
     });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "Ошибка отправки на сервер");
-    }
-
-  } catch (err: any) {
-    setError(err.message || "Произошла неизвестная ошибка.");
-  } finally {
-    setIsLoading(false);
-    setIsFinished(true);
-  }
-};
-
-
-
-  const currentQuestion = QUIZ_QUESTIONS[step - 1];
+    const data = await res.json();
+    setStatus(data.success ? "reCAPTCHA пройдена!" : `Ошибка: ${data.error}`);
+  };
 
   return (
-    <section className="bg-gray-50 py-16 sm:py-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl min-h-[500px] flex flex-col justify-center items-center">
-          {isFinished ? (
-             <Summary isLoading={isLoading} error={error} result={geminiResult} />
-          ) : (
-            <>
-              <ProgressBar currentStep={step} totalSteps={totalSteps + 1} />
-              
-              {step > 1 && step <= totalSteps + 1 && (
-                  <button onClick={handleBack} className="self-start mb-4 text-gray-600 hover:text-gray-900 flex items-center gap-2">
-                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                     Назад
-                  </button>
-              )}
-
-              <div className="w-full flex-grow flex items-center">
-                {currentQuestion ? (
-                  <QuizStep question={currentQuestion} onAnswer={handleAnswer} />
-                ) : (
-                  <FinalStep onSubmit={handleSubmit} />
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </section>
+    <div>
+      <button onClick={handleSubmit}>Отправить квиз</button>
+      <p>{status}</p>
+    </div>
   );
 };
 
