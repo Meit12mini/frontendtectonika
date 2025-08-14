@@ -108,6 +108,7 @@ const Quiz: React.FC = () => {
   try {
     // 1️⃣ Сначала получаем токен reCAPTCHA
     const token = await executeRecaptcha("quiz_submit");
+    console.log("reCAPTCHA token:", token);
     if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
     // 2️⃣ Далее обрабатываем ответы квиза
