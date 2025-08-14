@@ -106,16 +106,17 @@ const Quiz: React.FC = () => {
   setError(null);
 
   try {
-    // 1️⃣ Сначала получаем токен reCAPTCHA
+    // Получаем token reCAPTCHA первым
     const token = await executeRecaptcha("quiz_submit");
-    console.log("reCAPTCHA token:", token);
+    console.log("reCAPTCHA token:", token); // для проверки
+
     if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
-    // 2️⃣ Далее обрабатываем ответы квиза
+    // Далее обрабатываем ответы квиза
     const result = await processLead(answers, phone);
     setGeminiResult(result);
 
-    // 3️⃣ Отправляем на сервер с токеном
+    // Отправляем на сервер с токеном
     const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
