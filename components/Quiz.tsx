@@ -1,47 +1,26 @@
-
 import React, { useState, useCallback } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { QUIZ_QUESTIONS } from '../constants';
 import type { Answers, QuizQuestion, QuizOption, GeminiResponse } from '../types';
 import ProgressBar from './ProgressBar';
 import Summary from './Summary';
 import { processLead } from '../services/geminiService';
 
-
+// Один шаг квиза
 const QuizStep: React.FC<{ question: QuizQuestion; onAnswer: (answer: string) => void }> = ({ question, onAnswer }) => {
-  
   const getOptionClass = (type: string) => {
     switch(type) {
-      case 'icon':
-        return "flex flex-col items-center justify-center p-4 md:p-6 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:border-amber-500 hover:bg-amber-50 hover:shadow-md h-32 md:h-40";
-      case 'image':
-        return "relative border-2 rounded-lg cursor-pointer transition-all duration-200 hover:border-amber-500 hover:shadow-md overflow-hidden group";
-      case 'text':
-      default:
-        return "w-full text-left p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:border-amber-500 hover:bg-amber-50";
+      case 'icon': return "flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer hover:border-amber-500 hover:bg-amber-50 h-32";
+      case 'image': return "relative border-2 rounded-lg cursor-pointer overflow-hidden group";
+      default: return "w-full text-left p-4 border-2 rounded-lg cursor-pointer hover:border-amber-500 hover:bg-amber-50";
     }
   };
 
   const renderOption = (option: QuizOption) => {
     switch (question.type) {
-      case 'icon':
-        return (
-          <>
-            <div className="text-amber-600 mb-2">{option.icon}</div>
-            <span className="font-semibold text-center">{option.text}</span>
-          </>
-        );
-      case 'image':
-        return (
-          <>
-            <img src={option.image} alt={option.text} className="w-full h-32 md:h-40 object-cover transform group-hover:scale-110 transition-transform duration-300"/>
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-2">
-              <span className="font-bold text-lg">{option.text}</span>
-              {option.tooltip && <span className="text-xs text-center hidden md:block mt-1">{option.tooltip}</span>}
-            </div>
-          </>
-        );
-      default:
-        return <span className="font-medium">{option.text}</span>;
+      case 'icon': return <><div className="text-amber-600 mb-2">{option.icon}</div><span className="font-semibold text-center">{option.text}</span></>;
+      case 'image': return <img src={option.image} alt={option.text} className="w-full h-32 object-cover"/>;
+      default: return <span>{option.text}</span>;
     }
   };
 
@@ -51,8 +30,8 @@ const QuizStep: React.FC<{ question: QuizQuestion; onAnswer: (answer: string) =>
     <div className="w-full">
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">{question.question}</h2>
       <div className={`grid ${gridClass} gap-4`}>
-        {question.options.map((option, index) => (
-          <div key={index} className={getOptionClass(question.type)} onClick={() => onAnswer(option.text)}>
+        {question.options.map((option, idx) => (
+          <div key={idx} className={getOptionClass(question.type)} onClick={() => onAnswer(option.text)}>
             {renderOption(option)}
           </div>
         ))}
@@ -61,6 +40,7 @@ const QuizStep: React.FC<{ question: QuizQuestion; onAnswer: (answer: string) =>
   );
 };
 
+// Финальный шаг — ввод телефона
 const FinalStep: React.FC<{ onSubmit: (phone: string) => void }> = ({ onSubmit }) => {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
@@ -71,87 +51,100 @@ const FinalStep: React.FC<{ onSubmit: (phone: string) => void }> = ({ onSubmit }
     if (phoneRegex.test(phone)) {
       setError('');
       onSubmit(phone);
-    } else {
-      setError('Пожалуйста, введите корректный номер телефона.');
-    }
+    } else setError('Введите корректный номер телефона.');
   };
-  
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, '');
-    if (input.startsWith('7') || input.startsWith('8')) {
-        input = input.substring(1);
-    }
-    let formattedPhone = '+7 (';
-    if (input.length > 0) {
-        formattedPhone += input.substring(0, 3);
-    }
-    if (input.length >= 4) {
-        formattedPhone += ') ' + input.substring(3, 6);
-    }
-    if (input.length >= 7) {
-        formattedPhone += '-' + input.substring(6, 8);
-    }
-    if (input.length >= 9) {
-        formattedPhone += '-' + input.substring(8, 10);
-    }
-    setPhone(formattedPhone);
+    if (input.startsWith('7') || input.startsWith('8')) input = input.substring(1);
+    let formatted = '+7 (';
+    if (input.length >= 1) formatted += input.substring(0,3);
+    if (input.length >= 4) formatted += ') ' + input.substring(3,6);
+    if (input.length >= 7) formatted += '-' + input.substring(6,8);
+    if (input.length >= 9) formatted += '-' + input.substring(8,10);
+    setPhone(formatted);
   };
 
-
   return (
-    <div className="text-center max-w-lg mx-auto">
-      <h2 className="text-3xl font-bold mb-2">Отлично! Ваш расчет почти готов!</h2>
-      <p className="text-gray-600 mb-6">Оставьте ваш номер телефона, и мы отправим вам в WhatsApp/Telegram точную смету, каталог и скидку.</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="tel"
-          value={phone}
-          onChange={handlePhoneChange}
-          placeholder="+7 (___) ___-__-__"
-          className="w-full p-4 border-2 rounded-lg mb-4 text-center text-lg focus:outline-none focus:border-amber-500"
-          maxLength={18}
-        />
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <button
-          type="submit"
-          className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 ease-in-out transform hover:scale-105"
-        >
-          ПОЛУЧИТЬ РАСЧЕТ И ПОДАРКИ
-        </button>
-      </form>
-      <p className="text-xs text-gray-500 mt-4">
-        Нажимая на кнопку, вы даете согласие на обработку персональных данных и соглашаетесь с нашей <a href="#" className="underline">политикой конфиденциальности</a>.
-      </p>
-    </div>
+    <form onSubmit={handleSubmit} className="text-center max-w-lg mx-auto">
+      <input type="tel" value={phone} onChange={handlePhoneChange} placeholder="+7 (___) ___-__-__"
+        className="w-full p-4 border-2 rounded-lg mb-4 text-center text-lg focus:outline-none focus:border-amber-500"
+        maxLength={18} />
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      <button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-lg">ПОЛУЧИТЬ РАСЧЕТ</button>
+    </form>
   );
 };
 
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+// Главный компонент квиза
 const Quiz: React.FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
-  const [status, setStatus] = useState("");
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [isFinished, setIsFinished] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [geminiResult, setGeminiResult] = useState<GeminiResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
-    if (!executeRecaptcha) return;
+  const totalSteps = QUIZ_QUESTIONS.length;
 
-    setStatus("Получаем токен...");
-    const token = await executeRecaptcha("quiz_submit");
+  const handleAnswer = useCallback((answer: string) => {
+    setAnswers(prev => ({ ...prev, [step]: answer }));
+    setStep(s => s + 1);
+  }, [step]);
 
-    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
+  const handleBack = () => { if (step > 1) setStep(s => s - 1); };
 
-    const data = await res.json();
-    setStatus(data.success ? "reCAPTCHA пройдена!" : `Ошибка: ${data.error}`);
+  const handleSubmit = async (phone: string) => {
+    if (!executeRecaptcha) return console.error("reCAPTCHA не инициализирован");
+    setIsLoading(true); setError(null);
+    try {
+      const result = await processLead(answers, phone);
+      setGeminiResult(result);
+
+      const token = await executeRecaptcha("quiz_submit");
+      if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
+
+      const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...result, token }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Ошибка отправки на сервер");
+      }
+    } catch (err: any) { setError(err.message || "Произошла неизвестная ошибка."); }
+    finally { setIsLoading(false); setIsFinished(true); }
   };
 
+  const currentQuestion = QUIZ_QUESTIONS[step - 1];
+
   return (
-    <div>
-      <button onClick={handleSubmit}>Отправить квиз</button>
-      <p>{status}</p>
-    </div>
+    <section className="bg-gray-50 py-16 sm:py-24">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl min-h-[500px] flex flex-col justify-center items-center">
+          {isFinished ? (
+            <Summary isLoading={isLoading} error={error} result={geminiResult} />
+          ) : (
+            <>
+              <ProgressBar currentStep={step} totalSteps={totalSteps + 1} />
+              {step > 1 && step <= totalSteps + 1 && (
+                <button onClick={handleBack} className="self-start mb-4 text-gray-600 hover:text-gray-900">Назад</button>
+              )}
+              <div className="w-full flex-grow flex items-center">
+                {currentQuestion ? (
+                  <QuizStep question={currentQuestion} onAnswer={handleAnswer} />
+                ) : (
+                  <FinalStep onSubmit={handleSubmit} />
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
   );
 };
 
