@@ -153,59 +153,35 @@ const Quiz: React.FC = () => {
     }
   };
 
-//   const handleSubmit = async (phone: string) => {
-//   setIsLoading(true);
-//   setError(null);
-//   try {
-//     // 1. Обработка квиза через Gemini (AI)
-//     const result = await processLead(answers, phone);
-//     setGeminiResult(result);
-
-//     // 2. Отправка на твой backend
-//     const recaptchaToken = await executeRecaptcha("quiz_submit"); // если используешь reCAPTCHA v3
-//     const res = await fetch("http://localhost:3001/api/lead", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ ...result, token: recaptchaToken })
-//     });
-
-//     if (!res.ok) {
-//       const errorData = await res.json();
-//       throw new Error(errorData.error || "Ошибка отправки на сервер");
-//     }
-
-//   } catch (err: any) {
-//     setError(err.message || "Произошла неизвестная ошибка.");
-//   } finally {
-//     setIsLoading(false);
-//     setIsFinished(true);
-//   }
-// };
-
-const handleSubmit = async (phone: string) => {
+  const handleSubmit = async (phone: string) => {
   setIsLoading(true);
   setError(null);
 
   try {
-    // Симуляция ответа от бэка
-    const fakeResult: GeminiResponse = {
-      leadStatus: "🔥 ГОРЯЧИЙ",
-      telegramMessage: "Тестовое сообщение для Telegram",
-      clientMessage: "Тестовое сообщение для клиента",
-      googleSheetRow: ["Дата", phone, "🔥 ГОРЯЧИЙ", "Ответ1", "Ответ2", "Ответ3", "Ответ4", "Ответ5", "Ответ6", "UTM"]
-    };
+    // 1. Обработка квиза через Gemini (AI)
+    const result = await processLead(answers, phone);
+    setGeminiResult(result);
 
-    setGeminiResult(fakeResult);
+    // 2. Получение токена reCAPTCHA (если используешь v3)
+    let recaptchaToken: string | null = null;
+    if (executeRecaptcha) {
+      recaptchaToken = await executeRecaptcha("quiz_submit");
+    }
 
-    // Тестовый fetch на бэк (можно закомментировать, если бэк ещё не работает)
-    /*
-    const token = await executeRecaptcha("quiz_submit");
-    await fetch("http://localhost:3001/api/lead", {
+    // 3. Отправка данных на твой backend
+    const res = await fetch("https://backendtectonika.onrender.com//api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...fakeResult, token })
+      body: JSON.stringify({
+        ...result,
+        token: recaptchaToken,
+      }),
     });
-    */
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Ошибка отправки на сервер");
+    }
 
   } catch (err: any) {
     setError(err.message || "Произошла неизвестная ошибка.");
@@ -214,6 +190,8 @@ const handleSubmit = async (phone: string) => {
     setIsFinished(true);
   }
 };
+
+
 
   const currentQuestion = QUIZ_QUESTIONS[step - 1];
 
