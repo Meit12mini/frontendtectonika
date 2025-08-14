@@ -78,7 +78,7 @@ const FinalStep: React.FC<{ onSubmit: (phone: string) => void }> = ({ onSubmit }
 
 // Главный компонент квиза
 const Quiz: React.FC = () => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -94,7 +94,7 @@ const Quiz: React.FC = () => {
   }, [step]);
 
   const handleBack = () => { if (step > 1) setStep(s => s - 1); };
-
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const handleSubmit = async (phone: string) => {
     if (!executeRecaptcha) return console.error("reCAPTCHA не инициализирован");
     setIsLoading(true); setError(null);
