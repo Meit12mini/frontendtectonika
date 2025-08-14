@@ -163,16 +163,23 @@ const Quiz: React.FC = () => {
     setGeminiResult(result);
 
     // 2. Получение токена reCAPTCHA (если используешь v3)
-    let recaptchaToken: string | null = null;
-    if (executeRecaptcha) {
-      recaptchaToken = await executeRecaptcha("quiz_submit");
-    }
+    if (!executeRecaptcha) {
+  console.error("executeRecaptcha не инициализирован");
+  return;
+}
+
+const recaptchaToken = await executeRecaptcha("quiz_submit");
+if (!recaptchaToken) {
+  console.error("Не удалось получить токен reCAPTCHA");
+  return;
+}
 
     // 3. Отправка данных на твой backend
-    const res = await fetch("https://backendtectonika.onrender.com//api/lead", {
+    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+
         ...result,
         token: recaptchaToken,
       }),
