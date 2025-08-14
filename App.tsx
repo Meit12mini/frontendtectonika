@@ -6,7 +6,6 @@ import Quiz from './components/Quiz';
 import Gallery from './components/Gallery';
 import Faq from './components/Faq';
 import Footer from './components/Footer';
-import "./index.css"
 
 
 
