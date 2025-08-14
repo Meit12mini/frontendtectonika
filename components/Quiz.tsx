@@ -97,28 +97,44 @@ const Quiz: React.FC = () => {
   const handleBack = () => { if (step > 1) setStep(s => s - 1); };
   const { executeRecaptcha } = useGoogleReCaptcha();
   const handleSubmit = async (phone: string) => {
-    if (!executeRecaptcha) return console.error("reCAPTCHA не инициализирован");
-    setIsLoading(true); setError(null);
-    try {
-      const result = await processLead(answers, phone);
-      setGeminiResult(result);
+  if (!executeRecaptcha) {
+    setError("reCAPTCHA не инициализирована");
+    return;
+  }
 
-      const token = await executeRecaptcha("quiz_submit");
-      if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
+  setIsLoading(true);
+  setError(null);
 
-      const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...result, token }),
-      });
+  try {
+    // 1️⃣ Сначала получаем токен reCAPTCHA
+    const token = await executeRecaptcha("quiz_submit");
+    if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Ошибка отправки на сервер");
-      }
-    } catch (err: any) { setError(err.message || "Произошла неизвестная ошибка."); }
-    finally { setIsLoading(false); setIsFinished(true); }
-  };
+    // 2️⃣ Далее обрабатываем ответы квиза
+    const result = await processLead(answers, phone);
+    setGeminiResult(result);
+
+    // 3️⃣ Отправляем на сервер с токеном
+    const res = await fetch("https://backendtectonika.onrender.com/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...result, token }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Ошибка отправки на сервер");
+    }
+
+    setIsFinished(true);
+
+  } catch (err: any) {
+    setError(err.message || "Произошла неизвестная ошибка.");
+    setIsFinished(true);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const currentQuestion = QUIZ_QUESTIONS[step - 1];
 
