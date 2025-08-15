@@ -4,7 +4,7 @@ import { QUIZ_QUESTIONS } from '../constants';
 import type { Answers, QuizQuestion, QuizOption, GeminiResponse } from '../types';
 import ProgressBar from './ProgressBar';
 import Summary from './Summary';
-
+import { processLead } from '../services/geminiService';
 
 // Один шаг квиза
 const QuizStep: React.FC<{ question: QuizQuestion; onAnswer: (answer: string) => void }> = ({ question, onAnswer }) => {
@@ -130,19 +130,9 @@ const handleSubmit = async (phone: string) => {
     }
 
     // 3) Капча пройдена — теперь обрабатываем лид
+    const result = await processLead(answers, phone);
+    setGeminiResult(result);
 
-
-    // 4) Отправляем данные формы на ваш эндпоинт сохранения
-    const submitRes = await fetch(VERIFY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({answers, phone}), // здесь уже без token, если вашему бэку он не нужен
-    });
-
-    if (!submitRes.ok) {
-      const data = await submitRes.json().catch(() => ({}));
-      throw new Error(data.error || "Ошибка отправки данных");
-    }
 
     setIsFinished(true);
 
