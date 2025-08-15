@@ -133,6 +133,17 @@ const handleSubmit = async (phone: string) => {
     const result = await processLead(answers, phone);
     setGeminiResult(result);
 
+    // 4) Отправляем данные формы на ваш эндпоинт сохранения
+    const submitRes = await fetch(VERIFY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(result), // здесь уже без token, если вашему бэку он не нужен
+    });
+
+    if (!submitRes.ok) {
+      const data = await submitRes.json().catch(() => ({}));
+      throw new Error(data.error || "Ошибка отправки данных");
+    }
 
     setIsFinished(true);
 
