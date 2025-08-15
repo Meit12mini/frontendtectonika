@@ -98,7 +98,7 @@ const Quiz: React.FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   // наверху файла можно (по желанию) завести константы
 const VERIFY_URL = "https://backendtectonika.onrender.com/api/lead";
-const SUBMIT_URL = "https://backendtectonika.onrender.com/api/submit"; 
+
 // ^^^ замените на ваш реальный эндпоинт для приёма данных.
 // Если отдельного эндпоинта пока нет — временно поставьте сюда тот же VERIFY_URL и передавайте token ещё раз.
 
@@ -133,7 +133,7 @@ const handleSubmit = async (phone: string) => {
     setGeminiResult(result);
 
     // 4) Отправляем данные формы на ваш эндпоинт сохранения
-    const submitRes = await fetch(SUBMIT_URL, {
+    const submitRes = await fetch(VERIFY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(result), // здесь уже без token, если вашему бэку он не нужен
