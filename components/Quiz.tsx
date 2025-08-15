@@ -98,6 +98,7 @@ const Quiz: React.FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   // наверху файла можно (по желанию) завести константы
 const VERIFY_URL = "https://backendtectonika.onrender.com/api/lead";
+const VERIF = "https://backendtectonika.onrender.com/api/verify-captcha";
 
 // ^^^ замените на ваш реальный эндпоинт для приёма данных.
 // Если отдельного эндпоинта пока нет — временно поставьте сюда тот же VERIFY_URL и передавайте token ещё раз.
@@ -117,7 +118,7 @@ const handleSubmit = async (phone: string) => {
     if (!token) throw new Error("Не удалось получить токен reCAPTCHA");
 
     // 2) Проверяем токен на сервере (только { token })
-    const verifyRes = await fetch(VERIFY_URL, {
+    const verifyRes = await fetch(VERIF, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
