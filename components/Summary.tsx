@@ -34,7 +34,7 @@ const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => {
     useEffect(() => {
         // Яндекс Метрика
         if (typeof window !== "undefined" && (window as any).ym) {
-            (window as any).ym(460371106, "reachGoal", "quiz_finished");
+            (window as any).ym(103774008, "reachGoal", "quiz_finished");
         }
 
         // Google Analytics 4 (если подключен через gtag)
