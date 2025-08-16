@@ -1,7 +1,7 @@
 
-import React from 'react';
-import type { GeminiResponse } from '../types';
-import Icon from './Icon';
+import React, { useEffect } from "react";
+import type { GeminiResponse } from "../types";
+import Icon from "./Icon";
 
 interface SummaryProps {
     isLoading: boolean;
@@ -30,7 +30,23 @@ const ErrorDisplay: React.FC<{ message: string }> = ({ message }) => (
     </div>
 );
 
-const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => (
+const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => {
+    useEffect(() => {
+        // Яндекс Метрика
+        if (typeof window !== "undefined" && (window as any).ym) {
+            (window as any).ym(460371106, "reachGoal", "quiz_finished");
+        }
+
+        // Google Analytics 4 (если подключен через gtag)
+        // if (typeof window !== "undefined" && (window as any).gtag) {
+        //     (window as any).gtag("event", "quiz_finished", {
+        //         event_category: "quiz",
+        //         event_label: "Форма успешно отправлена",
+        //     });
+        // }
+    }, []);
+
+    return (
     <div className="text-center max-w-2xl mx-auto">
         <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
              <Icon type="check" className="h-6 w-6 text-green-600" />
@@ -59,6 +75,7 @@ const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => (
         </div>
     </div>
 );
+};
 
 const Summary: React.FC<SummaryProps> = ({ isLoading, error, result }) => {
     if (isLoading) {
