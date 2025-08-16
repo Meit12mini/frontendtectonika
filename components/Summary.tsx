@@ -38,12 +38,12 @@ const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => {
         }
 
         // Google Analytics 4 (если подключен через gtag)
-        // if (typeof window !== "undefined" && (window as any).gtag) {
-        //     (window as any).gtag("event", "quiz_finished", {
-        //         event_category: "quiz",
-        //         event_label: "Форма успешно отправлена",
-        //     });
-        // }
+        if (typeof window !== "undefined" && (window as any).gtag) {
+            (window as any).gtag("event", "quiz_finished", {
+                event_category: "quiz",
+                event_label: "Форма успешно отправлена",
+            });
+        }
     }, []);
 
     return (
