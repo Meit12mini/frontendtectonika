@@ -72,14 +72,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
 ];
 
 export const GALLERY_IMAGES = [
-  "/public/project_img/photo_2025-08-17_14-55-07.webp",
-  "/public/project_img/photo_2025-08-17_14-55-24.webp",
-  "/public/project_img/photo_2025-08-17_14-55-29.webp",
-  "/public/project_img/photo_2025-08-17_14-55-34.webp",
-  "/public/project_img/photo_2025-08-17_14-55-38.webp",
-  "/public/project_img/photo_2025-08-17_14-55-41.webp",
-  "/public/project_img/photo_2025-08-17_14-55-45.webp",
-  "/public/project_img/photo_2025-08-17_14-55-53.webp",
+  "/project_img/photo_2025-08-17_14-55-07.webp",
+  "/project_img/photo_2025-08-17_14-55-24.webp",
+  "/project_img/photo_2025-08-17_14-55-29.webp",
+  "/project_img/photo_2025-08-17_14-55-34.webp",
+  "/project_img/photo_2025-08-17_14-55-38.webp",
+  "/project_img/photo_2025-08-17_14-55-53.webp",
+  "/project_img/photo_2025-08-17_14-55-41.webp",
+  "/project_img/photo_2025-08-17_14-55-45.webp",
 ];
 
 export const FAQ_ITEMS: FaqItem[] = [
