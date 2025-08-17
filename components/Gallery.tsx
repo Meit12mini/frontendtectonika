@@ -12,13 +12,13 @@ const Gallery: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {GALLERY_IMAGES.map((src, index) => (
-            <div key={index} className="group relative overflow-hidden rounded-lg shadow-lg">
+            <div key={index} className="group overflow-hidden rounded-lg shadow-lg">
               <img 
                 src={src} 
                 alt={`Готовый объект ${index + 1}`} 
                 className="w-full h-64 object-cover transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
+              <div className="absolute  bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
             </div>
           ))}
         </div>

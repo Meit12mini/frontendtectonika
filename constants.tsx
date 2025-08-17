@@ -72,14 +72,14 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
 ];
 
 export const GALLERY_IMAGES = [
-  "https://picsum.photos/id/1018/600/400",
-  "https://picsum.photos/id/1043/600/400",
-  "https://picsum.photos/id/1044/600/400",
-  "https://picsum.photos/id/1048/600/400",
-  "https://picsum.photos/id/1050/600/400",
-  "https://picsum.photos/id/1051/600/400",
-  "https://picsum.photos/id/211/600/400",
-  "https://picsum.photos/id/212/600/400",
+  "/public/project_img/photo_2025-08-17_14-55-07.webp",
+  "/public/project_img/photo_2025-08-17_14-55-24.webp",
+  "/public/project_img/photo_2025-08-17_14-55-29.webp",
+  "/public/project_img/photo_2025-08-17_14-55-34.webp",
+  "/public/project_img/photo_2025-08-17_14-55-38.webp",
+  "/public/project_img/photo_2025-08-17_14-55-41.webp",
+  "/public/project_img/photo_2025-08-17_14-55-45.webp",
+  "/public/project_img/photo_2025-08-17_14-55-53.webp",
 ];
 
 export const FAQ_ITEMS: FaqItem[] = [
