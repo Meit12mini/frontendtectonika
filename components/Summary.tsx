@@ -54,25 +54,7 @@ const SuccessDisplay: React.FC<{ result: GeminiResponse }> = ({ result }) => {
         <h2 className="text-3xl font-bold text-gray-900">Спасибо! Ваша заявка принята!</h2>
         <p className="text-lg text-gray-600 mt-2">Мы уже начали готовить для вас расчет. Скоро с вами свяжемся!</p>
 
-        <div className="mt-8 text-left space-y-6">
-            <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                    <Icon type="whatsapp" className="h-6 w-6 text-green-500"/>
-                    Сообщение для Вас (отправлено в WhatsApp/Telegram):
-                </h3>
-                <p className="text-gray-700 italic">"{result.clientMessage}"</p>
-            </div>
-
-            <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                    <Icon type="telegram" className="h-6 w-6 text-blue-500"/>
-                    Уведомление для нашего менеджера:
-                </h3>
-                <div className="text-gray-800 whitespace-pre-wrap bg-white p-3 rounded-md shadow-inner">
-                    <p>{result.telegramMessage}</p>
-                </div>
-            </div>
-        </div>
+       
     </div>
 );
 };

@@ -97,8 +97,8 @@ const Quiz: React.FC = () => {
   const handleBack = () => { if (step > 1) setStep(s => s - 1); };
   const { executeRecaptcha } = useGoogleReCaptcha();
   // наверху файла можно (по желанию) завести константы
-const VERIFY_URL = "https://backendtectonika.onrender.com/api/lead";
-const VERIF = "https://backendtectonika.onrender.com/api/verify-captcha";
+const VERIFY_URL = "http://45.153.69.162:3000/api/lead";
+const VERIF = "http://45.153.69.162:3000/api/verify-captcha";
 
 // ^^^ замените на ваш реальный эндпоинт для приёма данных.
 // Если отдельного эндпоинта пока нет — временно поставьте сюда тот же VERIFY_URL и передавайте token ещё раз.
