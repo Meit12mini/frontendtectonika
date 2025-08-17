@@ -13,9 +13,9 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Контакты</h3>
             <ul className="space-y-2 text-gray-400">
-              <li>Телефон: <a href="tel:+79991234567" className="hover:text-amber-400">+7 (999) 123-45-67</a></li>
-              <li>Email: <a href="mailto:info@tektonika.stroy" className="hover:text-amber-400">info@tektonika.stroy</a></li>
-              <li>Адрес: г. Чита, ул. Строителей, 1</li>
+              <li><a href="tel:+79991234567" className="hover:text-amber-400">+7 (999) 123-45-67</a></li>
+              <li><a href="mailto:info@tektonika.stroy" className="hover:text-amber-400">info@tektonika.stroy</a></li>
+              <li>г. Чита, ул. Строителей, 1</li>
             </ul>
           </div>
           <div>
