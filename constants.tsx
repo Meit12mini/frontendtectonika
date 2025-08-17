@@ -39,7 +39,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 4,
     question: "Из какого материала предпочитаете строить?",
-    type: 'image',
+    type: 'text',
     options: [
       { text: "Газобетон", tooltip: "Теплый и доступный материал" },
       { text: "Кирпич", tooltip: "Надежность и долговечность" },

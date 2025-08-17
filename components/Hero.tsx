@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
       <img 
         src="/images/photo_2025-08-17_23-19-30.webp" 
         alt="Красивый загородный дом" 
-        className="absolute inset-0 w-full h-full object-cover object-right sm:object-left "
+        className="absolute inset-0 w-full h-full object-cover object-right 2xl:object-left "
       />
       <div className="relative z-20 max-w-4xl mx-auto flex flex-col items-center">
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4 shadow-lg">
