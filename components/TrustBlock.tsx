@@ -24,12 +24,12 @@ const TrustBlock: React.FC = () => {
                     />
                     <TrustItem
                         icon={<Icon type="experience" />}
-                        title="Опыт 10+ лет"
-                        description="Построили более 150 домов. Знаем все тонкости и нюансы строительства."
+                        title="Опыт 20+ лет"
+                        description="Построили более 50 домов. Знаем все тонкости и нюансы строительства."
                     />
                     <TrustItem
                         icon={<Icon type="guarantee" />}
-                        title="Гарантия 5 лет"
+                        title="Гарантия 2 лет"
                         description="Даем официальную гарантию на все выполненные работы и материалы."
                     />
                 </div>

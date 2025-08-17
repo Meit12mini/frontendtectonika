@@ -11,16 +11,16 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
     <div className="relative h-screen min-h-[600px] flex items-center justify-center text-white text-center px-4">
       <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
       <img 
-        src="/images/firstphoto2.webp" 
+        src="/images/photo_2025-08-17_23-19-30.webp" 
         alt="Красивый загородный дом" 
-        className="absolute inset-0 w-full h-full object-cover object-left"
+        className="absolute inset-0 w-full h-full object-cover object-right sm:object-left "
       />
       <div className="relative z-20 max-w-4xl mx-auto flex flex-col items-center">
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4 shadow-lg">
-          Строительство домов в Чите по честной цене — от 30 000 ₽ за м²
+          Строительство домов в Чите по честной цене — <br/> от 35 000 ₽ за м²
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mb-8 font-light">
-          Пройдите тест за 3 минуты и получите точную смету, каталог проектов и персональную скидку!
+          Пройдите тест за 3 минуты и получите точную смету, каталог проектов!
         </p>
         <button
           onClick={scrollToQuiz}
