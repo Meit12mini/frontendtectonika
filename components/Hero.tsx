@@ -11,7 +11,7 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
     <div className="relative h-screen min-h-[600px] flex items-center justify-center text-white text-center px-4">
       <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
       <img 
-        src="/public/images/firstphoto2.webp" 
+        src="/images/firstphoto2.webp" 
         alt="Красивый загородный дом" 
         className="absolute inset-0 w-full h-full object-cover object-left"
       />
