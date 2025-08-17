@@ -3,7 +3,7 @@ import type { Answers, GeminiResponse } from '../types';
 
 export const processLead = async (answers: Answers, phone: string): Promise<GeminiResponse> => {
   try {
-    const response = await fetch('http://45.153.69.162:3000/api/lead', {
+    const response = await fetch('https://tektonika-server-developer.site/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ answers, phone })
