@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://d-stroy-chita.ru/sitemap.xml
