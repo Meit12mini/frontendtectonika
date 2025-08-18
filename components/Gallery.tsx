@@ -14,7 +14,7 @@ const Gallery: React.FC = () => {
           {GALLERY_IMAGES.map((src, index) => (
             <div key={index} className="group overflow-hidden rounded-lg shadow-lg">
               <img 
-                src={src} 
+                src={src} Loading="lazy" width='1000'
                 alt={`Готовый объект ${index + 1}`} 
                 className="w-full h-64 object-cover transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               />
