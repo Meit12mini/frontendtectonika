@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 
 
 
+
 const App: React.FC = () => {
   const quizRef = useRef<HTMLDivElement>(null);
 

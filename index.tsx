@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -21,5 +22,6 @@ root.render(
     >
       <App />
     </GoogleReCaptchaProvider>
+   <SpeedInsights />
   </React.StrictMode>
 );
