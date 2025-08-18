@@ -7,8 +7,8 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">ООО «Тектоника»</h3>
-            <p className="text-gray-400">Тектоника - фундамент вашего бедующего</p>
+            <h3 className="text-lg font-bold mb-4">«Тектоника»</h3>
+            <p className="text-gray-400">Тектоника - фундамент вашего будущего</p>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Контакты</h3>
