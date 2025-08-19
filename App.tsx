@@ -7,13 +7,20 @@ import Gallery from './components/Gallery';
 import Faq from './components/Faq';
 import Footer from './components/Footer';
 
-
-
+declare const ym: (
+  counterId: number,
+  method: string,
+  goalName: string,
+  params?: any
+) => void;
 
 const App: React.FC = () => {
   const quizRef = useRef<HTMLDivElement>(null);
 
   const scrollToQuiz = () => {
+     if (typeof ym !== 'undefined') { // Проверка, что Метрика загружена
+    ym(103774008, 'reachGoal', 'quiz_start');
+  }
     quizRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
