@@ -8,14 +8,15 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-4">«Тектоника»</h3>
-            <p className="text-gray-400">Тектоника - фундамент вашего будущего</p>
+            <p className="text-gray-400">Фундамент вашего будущего</p>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Контакты</h3>
             <ul className="space-y-2 text-gray-400">
                <li><a href="mailto:tektonika-chita@mail.ru"  className="hover:text-amber-400">tektonika-chita@mail.ru</a></li>
               <li><a href="tel:+79245056655" className="hover:text-amber-400">+7 (924) 505-66-55</a></li>
-                          <li>г. Чита, ул.Трактовая, 7а</li>
+                          <li><a href="https://2gis.ru/chita/geo/9007834909941253"  target="_blank" 
+   rel="noopener noreferrer" className="hover:text-amber-400">г. Чита, ул.Трактовая, 7а, офис 21</a></li>
             </ul>
           </div>
           <div>
@@ -27,7 +28,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} ООО «Тектоника». Все права защищены.</p>
+          <p>&copy; 2022 ООО «Тектоника». Все права защищены.</p>
         </div>
       </div>
     </footer>
