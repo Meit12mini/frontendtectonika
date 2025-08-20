@@ -72,10 +72,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
 ];
 
 export const GALLERY_IMAGES = [
-  "/project_img/photo_2025-08-14_18-29-15.webp",
-  "/project_img/photo_2025-08-16_17-12-00.webp",
+  "/project_img/photo_2025-08-20_19-00-28.webp",
+  "/project_img/photo_2025-08-20_18-59-53.webp",
   "/project_img/photo_2025-08-17_14-55-41.webp",
-  "/project_img/photo_2025-08-17_14-55-56.webp",
+  "/project_img/photo_2025-08-20_18-59-535.webp",
   "/project_img/photo_2025-08-17_14-56-02.webp",
   "/project_img/photo_2025-08-17_14-56-04.webp",
   "/project_img/photo_2025-08-17_22-54-53.webp",
