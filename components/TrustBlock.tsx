@@ -29,7 +29,7 @@ const TrustBlock: React.FC = () => {
                     />
                     <TrustItem
                         icon={<Icon type="guarantee" />}
-                        title="Гарантия 2 лет"
+                        title="Гарантия 2 года"
                         description="Даем официальную гарантию на все выполненные работы и материалы."
                     />
                 </div>
