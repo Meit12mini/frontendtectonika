@@ -1,2 +1,11 @@
 @import "tailwindcss";
 @tailwind utilities;
+
+ @media(max-width: 768px) {
+        .arrow span{
+          width: 25px;
+          height: 25px;
+           border-bottom: 4px solid white;
+    border-right: 4px solid white;
+        }
+      };
