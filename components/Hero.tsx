@@ -22,7 +22,7 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
         <p className="text-lg md:text-xl max-w-2xl md:mb-8 font-light sm:m-0">
           Пройдите тест за 3 минуты и получите точную смету, каталог проектов!
         </p>
-            <div class="arrow 2xl:h-32 xl:m-0 mt-2 h-16">
+            <div class="arrow 2xl:h-24 xl:m-0 mt-6 h-20">
         <span class='sm:max-w-6 sm:max-h-6'></span>
         <span class='sm:max-w-6 sm:max-h-6'></span>
         <span class='sm:max-w-6 sm:max-h-6'></span>
