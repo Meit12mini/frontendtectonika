@@ -22,6 +22,12 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
         <p className="text-lg md:text-xl max-w-2xl mb-8 font-light">
           Пройдите тест за 3 минуты и получите точную смету, каталог проектов!
         </p>
+            <div class="arrow">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
         <button
           onClick={scrollToQuiz}
           className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-xl flex items-center gap-2"

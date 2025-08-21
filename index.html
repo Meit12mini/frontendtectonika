@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="yandex-verification" content="b900eb350557e789" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="/public/images/Favicon.ico"><!-- 32×32 -->
     <title>Тектоника: Строительство домов в Чите</title>
     <!-- Title и Description -->
 <title>Строительство домов в Чите и Забайкалье под ключ – «Д-Строй»</title>
@@ -27,6 +28,51 @@
 
      <link href="styles.css" rel="stylesheet">
     <style>
+      body {
+    background-color: #322B2B;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform: rotate(0deg);
+    cursor: pointer;
+}
+
+.arrow span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
       /* Smooth scrolling for anchor links */
       html {
         scroll-behavior: smooth;
