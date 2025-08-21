@@ -19,10 +19,10 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4 shadow-lg">
           Строительство домов в Чите по честной цене — <br/> от 35 000 ₽ за м²
         </h1>
-        <p className="text-lg md:text-xl max-w-2xl mb-8 font-light">
+        <p className="text-lg md:text-xl max-w-2xl mb-8 font-light sm:m-0">
           Пройдите тест за 3 минуты и получите точную смету, каталог проектов!
         </p>
-            <div class="arrow h-32">
+            <div class="arrow 2xl:h-32 sm:h-16">
         <span></span>
         <span></span>
         <span></span>
