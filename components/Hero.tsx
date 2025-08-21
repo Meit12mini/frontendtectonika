@@ -23,9 +23,9 @@ const Hero: React.FC<HeroProps> = ({ scrollToQuiz }) => {
           Пройдите тест за 3 минуты и получите точную смету, каталог проектов!
         </p>
             <div class="arrow 2xl:h-32 sm:h-16">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span class='sm:w-[25px] sm:h-[25px]'></span>
+        <span class='sm:w-[25px] sm:h-[25px]'></span>
+        <span class='sm:w-[25px] sm:h-[25px]'></span>
     </div>
 
         <button
